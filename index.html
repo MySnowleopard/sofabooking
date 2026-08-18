@@ -106,10 +106,7 @@
   h1 .accent { color: var(--brand); }
   .hero p.lead { font-size: 1.06rem; color: var(--ink-soft); max-width: 430px; margin-bottom: 32px; }
   .hero p.lead strong { color: var(--ink); font-weight: 600; }
-  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
-  .trusted { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #a5a0b8; margin-bottom: 16px; }
-  .trusted-row { display: flex; gap: 26px; align-items: center; justify-content: center; flex-wrap: wrap; color: var(--ink-soft); font-weight: 600; font-size: 0.9rem; opacity: 0.75; }
-  .trusted-row span { display: inline-flex; align-items: center; gap: 7px; }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
   /* Hero right: clean chat panel */
   .hero-right {
@@ -225,16 +222,24 @@
   .step h3 { font-size: 1.12rem; margin-bottom: 8px; }
   .step p { color: var(--ink-soft); font-size: 0.93rem; }
 
-  /* Marquee */
+  /* Made-for widget: dual counter-scrolling marquee under the stats */
+  .made-for { padding: 46px 0 0; }
+  .made-for .made-label {
+    text-align: center; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #a5a0b8; margin-bottom: 22px;
+  }
   .marquee-wrap { overflow: hidden; padding: 6px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-  .marquee { display: flex; gap: 13px; width: max-content; animation: scroll 32s linear infinite; }
+  .marquee { display: flex; gap: 13px; width: max-content; animation: scroll 36s linear infinite; }
+  .marquee.rev { animation-direction: reverse; animation-duration: 44s; }
   .marquee:hover { animation-play-state: paused; }
   @keyframes scroll { to { transform: translateX(-50%); } }
   .chip {
     display: inline-flex; align-items: center; gap: 9px; white-space: nowrap;
     padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 0.93rem;
     background: var(--panel); border: 1px solid var(--line); box-shadow: 0 6px 18px rgba(64,50,120,0.07);
+    transition: transform .25s, border-color .25s, color .25s;
   }
+  .chip:hover { transform: translateY(-3px); border-color: rgba(98,0,234,0.35); color: var(--brand); }
 
   /* Features */
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -382,7 +387,7 @@
       <div class="hero-left">
         <div class="hero-topline">
           <span class="pill">Buchungssystem per Chat</span>
-          <span class="pill">🇦🇹 Made in Wien</span>
+          <span class="pill">Made in Wien</span>
         </div>
         <h1>Mach einfache Buchungen zu <span class="accent">deinem USP.</span></h1>
         <p class="lead">
@@ -393,12 +398,6 @@
         <div class="hero-ctas">
           <a class="btn btn-dark" href="#preise">Kostenlos starten <span class="orb">→</span></a>
           <a class="btn btn-light" href="#how">So funktioniert's</a>
-        </div>
-        <div>
-          <div class="trusted">Gemacht für Anbieter wie dich</div>
-          <div class="trusted-row">
-            <span>🏎️ Go-Kart</span><span>🔫 Lasertag</span><span>🎓 Seminare</span><span>🏢 Räume</span><span>🧘 Wellness</span>
-          </div>
         </div>
       </div>
 
@@ -441,6 +440,23 @@
   </div>
 </header>
 
+<!-- ============ MADE FOR (animated) ============ -->
+<div class="made-for reveal">
+  <div class="made-label">Gemacht für Anbieter wie dich</div>
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🎓 Seminare &amp; Kurse</span><span class="chip">💻 E-Learning</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span>
+      <span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🎓 Seminare &amp; Kurse</span><span class="chip">💻 E-Learning</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span>
+    </div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee rev">
+      <span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">💻 E-Learning</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">🎓 Seminare &amp; Kurse</span>
+      <span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">💻 E-Learning</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">🎓 Seminare &amp; Kurse</span>
+    </div>
+  </div>
+</div>
+
 <!-- ============ HOW ============ -->
 <section id="how">
   <div class="wrap">
@@ -453,23 +469,6 @@
       <div class="step reveal"><span class="n">1</span><span class="ico">💬</span><h3>Erzähl von deinem Angebot</h3><p>Beschreibe dein Business im Chat, so wie du es einem Freund erklären würdest. Keine Formulare, kein Fachchinesisch.</p></div>
       <div class="step reveal"><span class="n">2</span><span class="ico">✨</span><h3>Die KI baut dein System</h3><p>Buchungsseite, Slots, Preise, Zahlungen, Erinnerungen: alles wird automatisch eingerichtet und mit SEO-Texten befüllt.</p></div>
       <div class="step reveal"><span class="n">3</span><span class="ico">🚀</span><h3>Teile den Link, kassiere Buchungen</h3><p>Deine Seite ist sofort live. Kunden buchen und zahlen online, du bekommst jede Buchung in Echtzeit.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BRANCHEN ============ -->
-<section style="padding-top: 10px;">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker">Für wen?</div>
-      <h2>100% angepasst an dein Business.</h2>
-      <p>Egal ob Rennstrecke oder Seminarraum: Sofabooking versteht dein Geschäftsmodell und passt sich an, nicht umgekehrt.</p>
-    </div>
-  </div>
-  <div class="marquee-wrap reveal">
-    <div class="marquee">
-      <span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🎓 Seminare &amp; Kurse</span><span class="chip">💻 E-Learning</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span>
-      <span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🎓 Seminare &amp; Kurse</span><span class="chip">💻 E-Learning</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span>
     </div>
   </div>
 </section>
