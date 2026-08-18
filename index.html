@@ -81,6 +81,7 @@
 
   /* ---------- Hero: split card ---------- */
   .hero { padding: 108px 0 34px; }
+  .hero-wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
   .hero-card {
     display: grid; grid-template-columns: 1.05fr 0.95fr;
     background: var(--panel); border-radius: 32px; overflow: hidden;
@@ -376,7 +377,7 @@
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <div class="wrap">
+  <div class="hero-wrap">
     <div class="hero-card">
       <div class="hero-left">
         <div class="hero-topline">
