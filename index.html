@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofabooking: Mach einfache Buchungen zu deinem USP</title>
+<meta name="description" content="Sofabooking baut dein Buchungssystem per Chat: in 10 Minuten live, 100% an dein Business angepasst. 30% weniger No-Shows, 20% mehr Umsatz.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛋️</text></svg>">
+<style>
+  :root {
+    --bg: #0b0912;
+    --bg-soft: #120f1c;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.09);
+    --text: #f4f1fa;
+    --muted: #a49cb8;
+    --coral: #ff6b5a;
+    --amber: #ffb15a;
+    --violet: #8b5cf6;
+    --grad: linear-gradient(120deg, #ff6b5a 0%, #ff9d5a 50%, #ffb15a 100%);
+    --grad-text: linear-gradient(100deg, #ff8a70, #ffb15a);
+    --radius: 20px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .display { font-family: 'Sora', sans-serif; }
+  ::selection { background: rgba(255,107,90,0.4); }
+
+  /* ---------- Aurora background ---------- */
+  .aurora {
+    position: fixed; inset: 0; z-index: -2; overflow: hidden;
+    background: radial-gradient(1200px 800px at 80% -10%, rgba(139,92,246,0.16), transparent 60%),
+                radial-gradient(1000px 700px at 10% 10%, rgba(255,107,90,0.14), transparent 60%),
+                radial-gradient(900px 900px at 50% 110%, rgba(255,177,90,0.10), transparent 60%);
+  }
+  .aurora::after {
+    content: ""; position: absolute; inset: -50%;
+    background: conic-gradient(from 0deg, transparent 0 70%, rgba(255,140,100,0.05) 80%, transparent 90%);
+    animation: spin 40s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .noise {
+    position: fixed; inset: 0; z-index: -1; opacity: 0.35; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 100; width: min(1160px, calc(100% - 32px));
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-radius: 999px;
+    background: rgba(11,9,18,0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: box-shadow .3s, background .3s;
+  }
+  nav.scrolled { background: rgba(11,9,18,0.85); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: 'Sora'; font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--text); }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--grad);
+    display: grid; place-items: center; font-size: 1.05rem;
+    box-shadow: 0 4px 18px rgba(255,107,90,0.45);
+  }
+  .nav-links { display: flex; gap: 26px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 26px; border-radius: 999px; border: none; cursor: pointer;
+    font-family: 'Inter'; font-weight: 600; font-size: 0.95rem; text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .btn-primary {
+    background: var(--grad); color: #1c0f0b;
+    box-shadow: 0 6px 24px rgba(255,120,80,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(255,120,80,0.5); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.06); color: var(--text);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.11); transform: translateY(-2px); }
+  .btn-sm { padding: 10px 20px; font-size: 0.88rem; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 170px 0 60px; position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 16px; border-radius: 999px; font-size: 0.82rem; font-weight: 600;
+    background: rgba(255,107,90,0.1); border: 1px solid rgba(255,107,90,0.25); color: #ffab9d;
+    margin-bottom: 24px;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,107,90,0.5); } 50% { box-shadow: 0 0 0 7px rgba(255,107,90,0); } }
+  h1 {
+    font-size: clamp(2.4rem, 5.2vw, 3.9rem); font-weight: 800; line-height: 1.08;
+    letter-spacing: -0.02em; margin-bottom: 24px;
+  }
+  .grad-text { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lead { font-size: 1.16rem; color: var(--muted); max-width: 540px; margin-bottom: 34px; }
+  .hero p.lead strong { color: var(--text); font-weight: 600; }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .hero-note { font-size: 0.85rem; color: var(--muted); }
+  .hero-note span { color: #7ce0a3; }
+
+  /* Chat mockup */
+  .chat-window {
+    background: rgba(18,15,28,0.85); border: 1px solid var(--card-border);
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    backdrop-filter: blur(12px);
+    transform: perspective(1200px) rotateY(-6deg) rotateX(2deg);
+    transition: transform .5s ease;
+  }
+  .chat-window:hover { transform: perspective(1200px) rotateY(0deg) rotateX(0deg); }
+  .chat-head {
+    display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.03);
+  }
+  .traffic { display: flex; gap: 6px; }
+  .traffic i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .traffic i:nth-child(1) { background: #ff5f57; } .traffic i:nth-child(2) { background: #febc2e; } .traffic i:nth-child(3) { background: #28c840; }
+  .chat-title { font-size: 0.85rem; color: var(--muted); margin-left: 6px; }
+  .chat-body { padding: 22px 18px; display: flex; flex-direction: column; gap: 14px; min-height: 380px; }
+  .msg {
+    max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.92rem; line-height: 1.5;
+    opacity: 0; transform: translateY(12px); transition: opacity .45s ease, transform .45s ease;
+  }
+  .msg.show { opacity: 1; transform: translateY(0); }
+  .msg.ai { align-self: flex-start; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-bottom-left-radius: 4px; }
+  .msg.user { align-self: flex-end; background: linear-gradient(120deg, rgba(255,107,90,0.85), rgba(255,157,90,0.85)); color: #1c0f0b; font-weight: 500; border-bottom-right-radius: 4px; }
+  .msg .tag { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #ffab9d; margin-bottom: 4px; }
+  .typing { align-self: flex-start; display: none; gap: 5px; padding: 14px 18px; background: rgba(255,255,255,0.06); border-radius: 16px; border-bottom-left-radius: 4px; }
+  .typing.on { display: inline-flex; }
+  .typing b { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+  .typing b:nth-child(2) { animation-delay: .2s; } .typing b:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100% { opacity: .25; } 40% { opacity: 1; } }
+
+  /* ---------- Stats band ---------- */
+  .stats { padding: 60px 0 30px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .stat {
+    text-align: center; padding: 30px 16px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--card-border);
+    transition: transform .3s, border-color .3s;
+  }
+  .stat:hover { transform: translateY(-4px); border-color: rgba(255,140,100,0.35); }
+  .stat .num { font-family: 'Sora'; font-size: clamp(1.9rem, 3.2vw, 2.6rem); font-weight: 800; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat .lbl { font-size: 0.88rem; color: var(--muted); margin-top: 6px; }
+
+  /* ---------- Sections ---------- */
+  section { padding: 90px 0; }
+  .sec-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+  .sec-head .kicker { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); margin-bottom: 14px; }
+  .sec-head h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+  .sec-head p { color: var(--muted); font-size: 1.05rem; }
+
+  /* Reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step {
+    position: relative; padding: 34px 26px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--card-border); overflow: hidden;
+    transition: transform .3s, border-color .3s;
+  }
+  .step:hover { transform: translateY(-5px); border-color: rgba(255,140,100,0.35); }
+  .step .n {
+    font-family: 'Sora'; font-size: 3.6rem; font-weight: 800; line-height: 1;
+    position: absolute; top: 14px; right: 20px; opacity: 0.09;
+  }
+  .step .ico { font-size: 1.8rem; margin-bottom: 16px; display: block; }
+  .step h3 { font-size: 1.15rem; margin-bottom: 10px; }
+  .step p { color: var(--muted); font-size: 0.94rem; }
+
+  /* Marquee */
+  .marquee-wrap { overflow: hidden; padding: 10px 0 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+  .marquee { display: flex; gap: 14px; width: max-content; animation: scroll 32s linear infinite; }
+  .marquee:hover { animation-play-state: paused; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+  .chip {
+    display: inline-flex; align-items: center; gap: 9px; white-space: nowrap;
+    padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 0.95rem;
+    background: var(--card); border: 1px solid var(--card-border);
+  }
+
+  /* Feature grid */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature {
+    padding: 30px 26px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--card-border);
+    position: relative; overflow: hidden; transition: transform .3s, border-color .3s;
+  }
+  .feature::before {
+    content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .3s;
+    background: radial-gradient(400px 200px at var(--mx, 50%) var(--my, 0%), rgba(255,120,80,0.09), transparent 70%);
+  }
+  .feature:hover::before { opacity: 1; }
+  .feature:hover { transform: translateY(-4px); border-color: rgba(255,140,100,0.3); }
+  .feature .ico {
+    width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; font-size: 1.3rem;
+    background: rgba(255,107,90,0.12); border: 1px solid rgba(255,107,90,0.22); margin-bottom: 18px;
+  }
+  .feature h3 { font-size: 1.08rem; margin-bottom: 8px; }
+  .feature p { color: var(--muted); font-size: 0.92rem; }
+
+  /* Testimonials */
+  .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .quote {
+    padding: 30px 26px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--card-border);
+    display: flex; flex-direction: column; gap: 18px; transition: transform .3s;
+  }
+  .quote:hover { transform: translateY(-4px); }
+  .quote .stars { color: var(--amber); letter-spacing: 3px; font-size: 0.9rem; }
+  .quote p { font-size: 0.97rem; color: var(--text); flex: 1; }
+  .who { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+    font-family: 'Sora'; font-weight: 700; font-size: 0.9rem; color: #1c0f0b;
+    background: var(--grad);
+  }
+  .who .name { font-weight: 600; font-size: 0.92rem; }
+  .who .role { font-size: 0.8rem; color: var(--muted); }
+
+  /* Pricing */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+  .plan {
+    padding: 36px 30px; border-radius: 24px; display: flex; flex-direction: column;
+    background: var(--card); border: 1px solid var(--card-border);
+    transition: transform .3s, border-color .3s;
+  }
+  .plan:hover { transform: translateY(-5px); }
+  .plan.hot {
+    background: linear-gradient(160deg, rgba(255,107,90,0.12), rgba(255,177,90,0.05));
+    border-color: rgba(255,120,80,0.45); position: relative;
+    box-shadow: 0 20px 60px rgba(255,107,90,0.15);
+  }
+  .plan .badge {
+    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: var(--grad); color: #1c0f0b; font-size: 0.75rem; font-weight: 700;
+    padding: 5px 16px; border-radius: 999px; white-space: nowrap;
+  }
+  .plan h3 { font-size: 1.2rem; margin-bottom: 6px; }
+  .plan .for { font-size: 0.86rem; color: var(--muted); margin-bottom: 22px; }
+  .price { font-family: 'Sora'; font-size: 2.7rem; font-weight: 800; line-height: 1; }
+  .price small { font-size: 0.95rem; font-weight: 500; color: var(--muted); font-family: 'Inter'; }
+  .fee { font-size: 0.84rem; color: var(--muted); margin: 8px 0 24px; }
+  .plan ul { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; flex: 1; }
+  .plan li { font-size: 0.92rem; color: var(--text); display: flex; gap: 10px; align-items: flex-start; }
+  .plan li::before { content: "✓"; color: #7ce0a3; font-weight: 700; flex-shrink: 0; }
+  .plan li.dim { color: var(--muted); }
+  .plan .btn { justify-content: center; }
+
+  /* FAQ */
+  .faq { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .qa {
+    border-radius: 16px; background: var(--card); border: 1px solid var(--card-border);
+    overflow: hidden; transition: border-color .3s;
+  }
+  .qa[open] { border-color: rgba(255,140,100,0.3); }
+  .qa summary {
+    cursor: pointer; padding: 20px 24px; font-weight: 600; font-size: 0.98rem;
+    list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: "+"; font-family: 'Sora'; font-size: 1.3rem; color: var(--coral); transition: transform .3s; flex-shrink: 0; }
+  .qa[open] summary::after { transform: rotate(45deg); }
+  .qa .a { padding: 0 24px 22px; color: var(--muted); font-size: 0.93rem; }
+
+  /* Final CTA */
+  .cta-box {
+    position: relative; text-align: center; padding: 80px 30px; border-radius: 30px; overflow: hidden;
+    background: linear-gradient(140deg, rgba(255,107,90,0.16), rgba(139,92,246,0.12));
+    border: 1px solid rgba(255,140,100,0.3);
+  }
+  .cta-box::before {
+    content: ""; position: absolute; width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,140,90,0.22), transparent 65%);
+    top: -250px; left: 50%; transform: translateX(-50%);
+  }
+  .cta-box h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; position: relative; }
+  .cta-box p { color: var(--muted); max-width: 520px; margin: 0 auto 34px; position: relative; }
+  .cta-box .btn { position: relative; }
+
+  /* Footer */
+  footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 50px 0 40px; margin-top: 40px; }
+  .foot { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+  .foot .col p, .foot .col a { color: var(--muted); font-size: 0.87rem; text-decoration: none; display: block; margin-bottom: 6px; }
+  .foot .col a:hover { color: var(--text); }
+  .foot .col h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; color: var(--text); }
+  .legal { margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+    .chat-window { transform: none; max-width: 520px; margin: 0 auto; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps, .features, .quotes, .plans { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    section { padding: 64px 0; }
+    .hero { padding-top: 130px; }
+  }
+</style>
+</head>
+<body>
+<div class="aurora"></div>
+<div class="noise"></div>
+
+<nav id="nav">
+  <a class="logo" href="#"><span class="logo-mark">🛋️</span>Sofabooking</a>
+  <ul class="nav-links">
+    <li><a href="#how">So funktioniert's</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#stimmen">Kundenstimmen</a></li>
+    <li><a href="#preise">Preise</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a class="btn btn-primary btn-sm" href="#preise">Kostenlos starten</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Das KI-Buchungssystem, das mitdenkt</span>
+      <h1>Mach einfache Buchungen zu <span class="grad-text">deinem USP.</span></h1>
+      <p class="lead">
+        Dein Buchungssystem ist der wichtigste Baustein deiner Kundenreise.
+        Sofabooking baut es dir per Chat: <strong>in 10 Minuten live</strong> und
+        <strong>zu 100% an dein Business angepasst</strong>. Ohne IT-Kenntnisse, ohne Setup-Gebühr.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#preise">Kostenlos starten →</a>
+        <a class="btn btn-ghost" href="#how">2 Minuten ansehen</a>
+      </div>
+      <p class="hero-note"><span>✓</span> Keine Kreditkarte nötig &nbsp;·&nbsp; <span>✓</span> Monatlich kündbar &nbsp;·&nbsp; <span>✓</span> DSGVO-konform, gehostet in der EU</p>
+    </div>
+
+    <div class="chat-window" id="chat">
+      <div class="chat-head">
+        <span class="traffic"><i></i><i></i><i></i></span>
+        <span class="chat-title">Sofabooking Assistent · online</span>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="msg ai" data-delay="600"><span class="tag">Sofabooking KI</span><br>Hi! 👋 Erzähl mir von deinem Business, ich baue dir dein Buchungssystem.</div>
+        <div class="msg user" data-delay="2200">Ich betreibe eine Gokart-Bahn in Wien. 10 Karts, Rennen alle 15 Minuten.</div>
+        <div class="msg ai" data-delay="4400"><span class="tag">Sofabooking KI</span><br>Perfekt! Deine Buchungsseite ist fertig: Slots alle 15 Min, max. 10 Fahrer pro Rennen. 🏁<br><br>Tipp: Soll ich eine Anzahlung bei der Buchung aktivieren? Das senkt deine No-Shows deutlich.</div>
+        <div class="msg user" data-delay="6600">Ja, mach das!</div>
+        <div class="msg ai" data-delay="8400"><span class="tag">Sofabooking KI</span><br>Erledigt ✅ Deine Seite ist live:<br><strong>gokart-wien.sofabooking.com</strong> 🎉</div>
+        <div class="typing" id="typing"><b></b><b></b><b></b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap stats">
+    <div class="stats-grid">
+      <div class="stat reveal"><div class="num" data-count="30" data-prefix="-" data-suffix="%">-30%</div><div class="lbl">weniger No-Shows</div></div>
+      <div class="stat reveal"><div class="num" data-count="20" data-prefix="+" data-suffix="%">+20%</div><div class="lbl">mehr Umsatz</div></div>
+      <div class="stat reveal"><div class="num" data-count="10" data-prefix="" data-suffix=" Min">10 Min</div><div class="lbl">bis zur ersten Buchung</div></div>
+      <div class="stat reveal"><div class="num">24/7</div><div class="lbl">buchbar, auch wenn du schläfst</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HOW ============ -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">So funktioniert's</div>
+      <h2>Beschreiben statt konfigurieren.</h2>
+      <p>Andere Systeme geben dir 100 Einstellungen. Sofabooking stellt dir 3 Fragen: und baut dann alles für dich.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><span class="n">1</span><span class="ico">💬</span><h3>Erzähl von deinem Angebot</h3><p>Beschreibe dein Business im Chat, so wie du es einem Freund erklären würdest. Keine Formulare, kein Fachchinesisch.</p></div>
+      <div class="step reveal"><span class="n">2</span><span class="ico">✨</span><h3>Die KI baut dein System</h3><p>Buchungsseite, Slots, Preise, Zahlungen, Erinnerungen: alles wird automatisch eingerichtet und mit SEO-Texten befüllt.</p></div>
+      <div class="step reveal"><span class="n">3</span><span class="ico">🚀</span><h3>Teile den Link, kassiere Buchungen</h3><p>Deine Seite ist sofort live. Kunden buchen und zahlen online, du bekommst jede Buchung in Echtzeit.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BRANCHEN ============ -->
+<section style="padding-top: 20px;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Für wen?</div>
+      <h2>100% angepasst an dein Business.</h2>
+      <p>Egal ob Rennstrecke oder Seminarraum: Sofabooking versteht dein Geschäftsmodell und passt sich an, nicht umgekehrt.</p>
+    </div>
+  </div>
+  <div class="marquee-wrap reveal">
+    <div class="marquee">
+      <span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🎓 Seminare &amp; Kurse</span><span class="chip">💻 E-Learning</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span>
+      <span class="chip">🏎️ Go-Kart-Bahnen</span><span class="chip">🔫 Laser-Tag-Arenen</span><span class="chip">⛳ Golf-Simulatoren</span><span class="chip">🎓 Seminare &amp; Kurse</span><span class="chip">💻 E-Learning</span><span class="chip">🏕️ Camps &amp; Freizeit</span><span class="chip">🏢 Raumvermietung</span><span class="chip">🧘 Sport &amp; Wellness</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Warum Sofabooking</div>
+      <h2>Ein Buchungssystem, das für dich arbeitet.</h2>
+      <p>Nicht nur ein Kalender mit Formular: Sofabooking denkt aktiv mit und schlägt dir nach jedem Schritt die nächste sinnvolle Verbesserung vor.</p>
+    </div>
+    <div class="features">
+      <div class="feature reveal"><div class="ico">🧠</div><h3>Proaktive KI</h3><p>Die KI beobachtet deine Auslastung und schlägt von sich aus Verbesserungen vor: Gruppenrabatte, bessere Slot-Zeiten, dynamische Preise.</p></div>
+      <div class="feature reveal"><div class="ico">🛡️</div><h3>Schluss mit No-Shows</h3><p>Anzahlung oder Kaution direkt bei der Buchung plus automatische Erinnerungen: So bleiben deine Slots nicht mehr leer.</p></div>
+      <div class="feature reveal"><div class="ico">💳</div><h3>Online-Zahlungen inklusive</h3><p>Karte, Apple Pay, Google Pay: Deine Kunden zahlen direkt bei der Buchung, du musst niemandem mehr hinterherlaufen.</p></div>
+      <div class="feature reveal"><div class="ico">🌐</div><h3>Eigene Buchungswebseite</h3><p>Du bekommst eine fertige Webseite mit SEO-optimierten Texten und deinem Branding: auf Wunsch mit eigener Domain.</p></div>
+      <div class="feature reveal"><div class="ico">📅</div><h3>Wächst mit dir</h3><p>Ein Standort oder zehn, allein oder mit Team: Ressourcen, Mitarbeiter, Kalender und API skalieren einfach mit.</p></div>
+      <div class="feature reveal"><div class="ico">🇪🇺</div><h3>DSGVO-konform</h3><p>Alle Daten werden in der EU gehostet. Entwickelt in Wien von der Wunderbyte GmbH.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="stimmen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Kundenstimmen</div>
+      <h2>Von Anbietern, die es getestet haben.</h2>
+    </div>
+    <div class="quotes">
+      <div class="quote reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Ich habe meine Bahn beschrieben, 20 Minuten später kam die erste Online-Buchung. So schnell war noch kein System eingerichtet."</p>
+        <div class="who"><div class="avatar">MK</div><div><div class="name">Max K.</div><div class="role">Go-Kart-Betreiber, Wien</div></div></div>
+      </div>
+      <div class="quote reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Die KI hat von sich aus Gruppenrabatte vorgeschlagen. Das fühlt sich an wie ein Mitarbeiter, der wirklich mitdenkt."</p>
+        <div class="who"><div class="avatar">SL</div><div><div class="name">Sarah L.</div><div class="role">Laser-Tag-Arena, Wien</div></div></div>
+      </div>
+      <div class="quote reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Unsere No-Show-Rate hat sich halbiert und das E-Mail-Ping-Pong mit Teilnehmern ist komplett verschwunden."</p>
+        <div class="who"><div class="avatar">TB</div><div><div class="name">Thomas B.</div><div class="role">Seminaranbieter, Linz</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="preise">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Preise</div>
+      <h2>Starte gratis. Zahle erst, wenn es läuft.</h2>
+      <p>Keine Setup-Gebühr, monatlich kündbar. Du zahlst nur, wenn dein Buchungssystem wirklich für dich arbeitet.</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>Free</h3>
+        <div class="for">Zum Ausprobieren und Loslegen</div>
+        <div class="price">0 €<small> / Monat</small></div>
+        <div class="fee">5% Service-Gebühr pro Buchung</div>
+        <ul>
+          <li>KI-Assistent für Setup &amp; Verwaltung</li>
+          <li>Eigene Buchungswebseite (Subdomain)</li>
+          <li>SEO-optimierte Texte</li>
+          <li>Online-Zahlungen (Karte, Apple &amp; Google Pay)</li>
+          <li>Automatische Erinnerungen</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://sofabooking.com" target="_blank" rel="noopener">Kostenlos starten</a>
+      </div>
+      <div class="plan hot reveal">
+        <span class="badge">Beliebtester Plan</span>
+        <h3>Pro</h3>
+        <div class="for">Für Anbieter, die wachsen wollen</div>
+        <div class="price">39 €<small> / Monat</small></div>
+        <div class="fee">Nur 1,9% Service-Gebühr pro Buchung</div>
+        <ul>
+          <li>Alles aus Free</li>
+          <li>Unbegrenzte Ressourcen &amp; Mitarbeiter</li>
+          <li>Proaktive KI-Optimierung (Preise, Auslastung)</li>
+          <li>Gutscheine, Pakete &amp; Gruppenbuchungen</li>
+          <li>Eigene Domain</li>
+        </ul>
+        <a class="btn btn-primary" href="https://sofabooking.com" target="_blank" rel="noopener">14 Tage gratis testen</a>
+      </div>
+      <div class="plan reveal">
+        <h3>Scale</h3>
+        <div class="for">Für mehrere Standorte &amp; Teams</div>
+        <div class="price">99 €<small> / Monat</small></div>
+        <div class="fee">Nur 0,9% Service-Gebühr pro Buchung</div>
+        <ul>
+          <li>Alles aus Pro</li>
+          <li>Mehrere Standorte &amp; Teams</li>
+          <li>API &amp; Kalender-Integration</li>
+          <li>Persönliches Onboarding</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://sofabooking.com" target="_blank" rel="noopener">Demo buchen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">FAQ</div>
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="faq reveal">
+      <details class="qa"><summary>Brauche ich technische Kenntnisse?</summary><div class="a">Nein. Du beschreibst dein Angebot im Chat, so wie du es einem Freund erklären würdest. Die KI übernimmt die komplette Einrichtung: Buchungsseite, Slots, Preise, Zahlungen und Erinnerungen.</div></details>
+      <details class="qa"><summary>Wie schnell bin ich startklar?</summary><div class="a">In der Regel unter 10 Minuten. Viele Anbieter erhalten ihre erste Online-Buchung noch am selben Tag.</div></details>
+      <details class="qa"><summary>Wie reduziert Sofabooking No-Shows?</summary><div class="a">Durch Anzahlungen oder Kautionen direkt bei der Buchung und automatische Erinnerungen. Wer schon bezahlt hat, kommt auch: Anbieter berichten von bis zu 50% weniger No-Shows.</div></details>
+      <details class="qa"><summary>Kann ich meine eigene Domain nutzen?</summary><div class="a">Ja, ab dem Pro-Plan kannst du deine eigene Domain verbinden. Im Free-Plan bekommst du eine kostenlose Subdomain wie dein-business.sofabooking.com.</div></details>
+      <details class="qa"><summary>Was passiert mit meinen Daten?</summary><div class="a">Alle Daten werden DSGVO-konform in der EU gehostet. Sofabooking wird von der Wunderbyte GmbH in Wien entwickelt und betrieben.</div></details>
+      <details class="qa"><summary>Kann ich jederzeit kündigen?</summary><div class="a">Ja, alle Pläne sind monatlich kündbar. Es gibt keine Setup-Gebühr und keine Mindestlaufzeit. Den Pro-Plan kannst du 14 Tage kostenlos testen.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section>
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <h2>Deine erste Buchung ist <span class="grad-text">10 Minuten</span> entfernt.</h2>
+      <p>Beschreib dein Business, lehn dich zurück und schau zu, wie dein Buchungssystem entsteht. Kostenlos, ohne Kreditkarte.</p>
+      <a class="btn btn-primary" href="https://sofabooking.com" target="_blank" rel="noopener">Jetzt kostenlos starten →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div class="col" style="max-width: 300px;">
+        <a class="logo" href="#" style="margin-bottom: 14px;"><span class="logo-mark">🛋️</span>Sofabooking</a>
+        <p>Das Buchungssystem, das sich zu 100% an dein Business anpasst. So einfach wie chatten.</p>
+      </div>
+      <div class="col">
+        <h4>Produkt</h4>
+        <a href="#how">So funktioniert's</a>
+        <a href="#features">Features</a>
+        <a href="#preise">Preise</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="col">
+        <h4>Kontakt</h4>
+        <p>Wunderbyte GmbH</p>
+        <p>Bruno-Marek-Allee 5/11 Z3<br>1020 Wien, Österreich</p>
+        <p><a href="mailto:info@wunderbyte.at">info@wunderbyte.at</a></p>
+      </div>
+      <div class="col">
+        <h4>Rechtliches</h4>
+        <a href="https://sofabooking.com" target="_blank" rel="noopener">Impressum</a>
+        <a href="https://sofabooking.com" target="_blank" rel="noopener">Datenschutz</a>
+        <a href="https://sofabooking.com" target="_blank" rel="noopener">AGB</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Wunderbyte GmbH. Alle Rechte vorbehalten.</span>
+      <span>Konzept-Landing-Page: erstellt mit ❤️ in Wien</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), { passive: true });
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Animated counters
+  const counters = document.querySelectorAll('.num[data-count]');
+  const cio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      cio.unobserve(e.target);
+      const el = e.target;
+      const target = parseInt(el.dataset.count, 10);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const t0 = performance.now();
+      const dur = 1400;
+      const tick = now => {
+        const p = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + Math.round(target * eased) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => cio.observe(el));
+
+  // Chat animation (typing indicator, then message)
+  const msgs = [...document.querySelectorAll('#chatBody .msg')];
+  const typing = document.getElementById('typing');
+  const chatBody = document.getElementById('chatBody');
+  let started = false;
+  const chatIO = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !started) {
+      started = true;
+      msgs.forEach(m => {
+        const d = parseInt(m.dataset.delay, 10);
+        if (m.classList.contains('ai')) {
+          setTimeout(() => { typing.classList.add('on'); chatBody.insertBefore(typing, m); }, Math.max(0, d - 900));
+        }
+        setTimeout(() => { typing.classList.remove('on'); m.classList.add('show'); }, d);
+      });
+      chatIO.disconnect();
+    }
+  }, { threshold: 0.3 });
+  chatIO.observe(document.getElementById('chat'));
+
+  // Feature card glow follows cursor
+  document.querySelectorAll('.feature').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+</script>
+</body>
+</html>
