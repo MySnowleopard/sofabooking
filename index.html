@@ -244,6 +244,50 @@
     margin: 0 30px; flex-shrink: 0;
   }
 
+  /* Setup configurator */
+  .cfg {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 26px;
+    box-shadow: var(--shadow); padding: 36px 34px; max-width: 980px; margin: 0 auto;
+  }
+  .cfg-step { display: flex; align-items: center; gap: 11px; font-family: 'Inter Tight'; font-weight: 600; font-size: 1.02rem; margin-bottom: 18px; }
+  .cfg-num { width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0; }
+  .cfg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cfg-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 20px 10px 16px; background: #fbfaff; border: 1.5px solid var(--line); border-radius: 16px;
+    cursor: pointer; font: inherit; font-weight: 600; font-size: 0.88rem; color: var(--ink-soft);
+    transition: transform .25s, border-color .25s, background .25s, color .25s;
+  }
+  .cfg-btn svg { width: 24px; height: 24px; }
+  .cfg-btn:hover { transform: translateY(-2px); border-color: #d9d2f0; }
+  .cfg-btn.active { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+  .cfg-fold { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.4,0,.2,1); }
+  .cfg-fold.open { grid-template-rows: 1fr; }
+  .cfg-fold > div { overflow: hidden; }
+  .cfg-fold .fold-pad { padding-top: 30px; }
+  .cfg-subs { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cfg-sub {
+    padding: 11px 20px; border-radius: 999px; background: #fbfaff; border: 1.5px solid var(--line);
+    cursor: pointer; font: inherit; font-weight: 600; font-size: 0.9rem; color: var(--ink-soft);
+    transition: transform .25s, border-color .25s, background .25s, color .25s;
+  }
+  .cfg-sub:hover { transform: translateY(-2px); border-color: #d9d2f0; }
+  .cfg-sub.active { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+  .cfg-result { border-top: 1px dashed var(--line); padding-top: 28px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 30px; align-items: start; }
+  .cfg-result h3 { font-size: 1.15rem; margin-bottom: 16px; }
+  .cfg-result h3 .accent { color: var(--brand); }
+  .cfg-check { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .cfg-check li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.93rem; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+  .cfg-check li.show { opacity: 1; transform: none; }
+  .cfg-check svg { width: 18px; height: 18px; color: var(--brand); flex-shrink: 0; margin-top: 3px; }
+  .cfg-chat { background: #f4f2fb; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .cmsg { padding: 10px 14px; border-radius: 14px; font-size: 0.86rem; line-height: 1.5; max-width: 94%; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+  .cmsg.show { opacity: 1; transform: none; }
+  .cmsg.user { align-self: flex-end; background: var(--brand); color: #fff; border-bottom-right-radius: 5px; font-weight: 500; }
+  .cmsg.ai { align-self: flex-start; background: #fff; color: var(--ink); border: 1px solid var(--line); border-bottom-left-radius: 5px; }
+  .cfg-cta { margin-top: 26px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .cfg-cta small { color: var(--ink-soft); font-size: 0.85rem; }
+
   /* Features */
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .feature {
@@ -362,6 +406,9 @@
     .hero-right { min-height: 520px; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .steps, .features, .quotes, .plans { grid-template-columns: 1fr; }
+    .cfg { padding: 26px 20px; }
+    .cfg-grid { grid-template-columns: repeat(2, 1fr); }
+    .cfg-result { grid-template-columns: 1fr; }
     .nav-links { display: none; }
     section { padding: 60px 0; }
     .hero { padding-top: 92px; }
@@ -473,6 +520,49 @@
       <div class="step reveal"><span class="n">1</span><span class="ico">💬</span><h3>Erzähl von deinem Angebot</h3><p>Beschreibe dein Business im Chat, so wie du es einem Freund erklären würdest. Keine Formulare, kein Fachchinesisch.</p></div>
       <div class="step reveal"><span class="n">2</span><span class="ico">✨</span><h3>Die KI baut dein System</h3><p>Buchungsseite, Slots, Preise, Zahlungen, Erinnerungen: alles wird automatisch eingerichtet und mit SEO-Texten befüllt.</p></div>
       <div class="step reveal"><span class="n">3</span><span class="ico">🚀</span><h3>Teile den Link, kassiere Buchungen</h3><p>Deine Seite ist sofort live. Kunden buchen und zahlen online, du bekommst jede Buchung in Echtzeit.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SETUP-KONFIGURATOR ============ -->
+<section id="setup" style="padding-top: 10px;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Dein Business</div>
+      <h2>Wähl deine Branche. Wir zeigen dir dein Setup.</h2>
+      <p>Sofabooking passt sich zu 100% an dein Business an. Probier es aus: Zwei Klicks, und du siehst, was die KI für dich einrichten würde.</p>
+    </div>
+    <div class="cfg reveal">
+      <div class="cfg-step"><span class="cfg-num">1</span>Wähle deine Branche</div>
+      <div class="cfg-grid" id="cfgBranchen"></div>
+      <div class="cfg-fold" id="cfgFold2">
+        <div>
+          <div class="fold-pad">
+            <div class="cfg-step"><span class="cfg-num">2</span><span id="cfgQ">Was trifft am besten zu?</span></div>
+            <div class="cfg-subs" id="cfgSubs"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-fold" id="cfgFold3">
+        <div>
+          <div class="fold-pad">
+            <div class="cfg-result">
+              <div>
+                <h3>Dein Sofabooking-Setup: <span class="accent" id="cfgTitle"></span></h3>
+                <ul class="cfg-check" id="cfgCheck"></ul>
+              </div>
+              <div class="cfg-chat" id="cfgChat">
+                <div class="cmsg user" id="cfgMsgUser"></div>
+                <div class="cmsg ai" id="cfgMsgAi"></div>
+              </div>
+            </div>
+            <div class="cfg-cta">
+              <a class="btn btn-dark" href="https://sofabooking.com" target="_blank" rel="noopener">Genau mein Setup: kostenlos starten <span class="orb">→</span></a>
+              <small>In rund 10 Minuten ist es live.</small>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -703,6 +793,126 @@
     else if (ci > 0) { ci--; setTimeout(type, 25); }
     else { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(type, 400); }
   })();
+
+  // Setup configurator
+  const I = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const CFG = [
+    { name: 'Hotel & Übernachtung', q: 'Welche Art von Betrieb?',
+      icon: I('<path d="M3 18v-8"/><path d="M3 14h18v4"/><circle cx="7" cy="10.5" r="1.5"/><path d="M11 14v-3.5h6a4 4 0 0 1 4 3.5"/>'),
+      bullets: ['Zimmerkategorien als buchbare Ressourcen mit eigenen Preisen', 'Anzahlung bei der Buchung: deutlich weniger Stornos und No-Shows', 'Bestätigungen und Check-in-Infos gehen automatisch raus'],
+      subs: [
+        { n: 'Pension & B&B', x: 'Einfache Belegungsübersicht, perfekt für Familienbetriebe', c: 'Ich führe eine kleine Pension mit 8 Zimmern.' },
+        { n: '3-Sterne-Hotel', x: 'Saisonpreise und Wochenend-Aufschläge laufen automatisch', c: 'Ich führe ein 3-Sterne-Hotel mit 40 Zimmern.' },
+        { n: '4-Sterne-Hotel', x: 'Upsells wie Spa-Slots und Late-Checkout direkt bei der Buchung', c: 'Ich führe ein 4-Sterne-Hotel mit Spa-Bereich.' },
+        { n: '5-Sterne-Hotel', x: 'Zusatzleistungen und Concierge-Anfragen im selben System', c: 'Ich führe ein 5-Sterne-Haus mit 120 Zimmern.' },
+        { n: 'Boutique-Hotel', x: 'Eigene Domain und dein Branding stehen im Mittelpunkt', c: 'Ich führe ein Boutique-Hotel mit 14 individuellen Zimmern.' }
+      ] },
+    { name: 'Go-Kart-Bahn', q: 'Was für eine Bahn?',
+      icon: I('<path d="M5 21V4"/><path d="M5 4c3-1.6 6 1.6 9 0 2-1 5 0 5 0v9c-3 1.6-6-1.6-9 0-2 1-5 0-5 0"/>'),
+      bullets: ['Rennen als Slots mit fixer Teilnehmerzahl, z. B. alle 15 Minuten', 'Gruppen- und Firmenevents mit Anzahlung buchbar', 'Umbuchen statt stornieren: ein Klick bei Ausfällen'],
+      subs: [
+        { n: 'Indoor-Bahn', x: 'Happy-Hour-Preise füllen schwache Abendslots', c: 'Ich betreibe eine Indoor-Kartbahn mit 10 Karts.' },
+        { n: 'Outdoor-Bahn', x: 'Saisonkalender mit flexiblen Öffnungszeiten', c: 'Ich betreibe eine Outdoor-Kartbahn, saisonal geöffnet.' },
+        { n: 'E-Kart-Bahn', x: 'Ladezeiten der Karts werden automatisch eingeplant', c: 'Ich betreibe eine E-Kart-Bahn mit 12 Elektro-Karts.' },
+        { n: 'Kinder- & Familienbahn', x: 'Altersfreigaben direkt im Buchungsformular', c: 'Ich betreibe eine Kartbahn mit eigenen Kinder-Karts.' }
+      ] },
+    { name: 'Laser-Tag-Arena', q: 'Wie ist dein Setup?',
+      icon: I('<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/>'),
+      bullets: ['Spielrunden als Slots mit maximaler Spielerzahl', 'Gruppenrabatte, die die KI von selbst vorschlägt', 'Anzahlung sichert Großgruppen verbindlich ab'],
+      subs: [
+        { n: 'Eine Arena', x: 'Optimierte Rundenzeiten für volle Auslastung', c: 'Ich betreibe eine Laser-Tag-Arena für bis zu 20 Spieler.' },
+        { n: 'Mehrere Arenen', x: 'Jede Arena als eigene Ressource mit eigenem Kalender', c: 'Wir haben zwei Arenen an einem Standort.' },
+        { n: 'Mobile Events', x: 'Zeitfenster je Einsatzort, Anfahrt wird eingeplant', c: 'Wir bauen mobile Laser-Tag-Events auf Festen auf.' }
+      ] },
+    { name: 'Golf-Simulator', q: 'Wie viele Boxen?',
+      icon: I('<path d="M8 21c0-1.4 1.8-2.4 4-2.4s4 1 4 2.4"/><path d="M12 18.5V3.5"/><path d="M12 3.5l6 2.6-6 2.6"/>'),
+      bullets: ['Boxen als Ressourcen: 30-, 60- oder 90-Minuten-Slots', '10er-Blöcke und Mitgliederpreise als Pakete', 'Erinnerungen senken vergessene Termine deutlich'],
+      subs: [
+        { n: 'Eine Box', x: 'Die KI schlägt Lückenfüller für freie Zeiten vor', c: 'Ich habe einen Golfsimulator mit einer Box.' },
+        { n: '2 bis 4 Boxen', x: 'Parallelbuchungen ohne Doppelbelegung', c: 'Wir betreiben drei Simulator-Boxen.' },
+        { n: 'Mit Trainerstunden', x: 'Trainer und Box werden automatisch zusammen gebucht', c: 'Wir bieten Simulator-Slots und Trainerstunden an.' }
+      ] },
+    { name: 'Seminare & Kurse', q: 'Was bietest du an?',
+      icon: I('<path d="M2 9.5l10-4.5 10 4.5-10 4.5z"/><path d="M6.5 11.5v4c0 1.6 2.5 2.9 5.5 2.9s5.5-1.3 5.5-2.9v-4"/>'),
+      bullets: ['Teilnehmerlisten, Wartelisten und Restplätze automatisch', 'Bezahlung bei der Anmeldung: kein E-Mail-Ping-Pong', 'Erinnerungen vor jedem Termin'],
+      subs: [
+        { n: 'Einzel-Workshops', x: 'Frühbucherpreise mit automatischem Stichtag', c: 'Ich gebe Wochenend-Workshops für bis zu 12 Personen.' },
+        { n: 'Kursreihen', x: 'Ein Kurs, viele Termine: Serienbuchung inklusive', c: 'Ich biete Kursreihen mit 8 Terminen an.' },
+        { n: 'Firmenschulungen', x: 'Sammelrechnung und Firmenrabatte', c: 'Wir schulen Firmenteams, oft 10 bis 30 Personen.' },
+        { n: 'Online-Kurse', x: 'Zugangslink kommt nach der Buchung automatisch', c: 'Meine Kurse finden komplett online statt.' }
+      ] },
+    { name: 'Raumvermietung', q: 'Welche Räume?',
+      icon: I('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9.5 21v-5.5h5V21"/><path d="M9 7.5h.01M15 7.5h.01M9 11.5h.01M15 11.5h.01"/>'),
+      bullets: ['Räume als Ressourcen mit eigenen Preisen und Zeiten', 'Stundenweise, halbtags oder ganztags buchbar', 'Kaution oder Anzahlung direkt bei der Buchung'],
+      subs: [
+        { n: 'Meetingräume', x: 'Beamer, Catering und Extras als Zusatzoptionen', c: 'Ich vermiete drei Meetingräume im Stadtzentrum.' },
+        { n: 'Eventlocation', x: 'Auf- und Abbauzeiten werden automatisch geblockt', c: 'Ich vermiete eine Eventlocation für bis zu 150 Gäste.' },
+        { n: 'Coworking', x: 'Tages- und Monatspässe als Pakete', c: 'Ich betreibe einen Coworking-Space mit 20 Plätzen.' },
+        { n: 'Proberäume', x: 'Wiederkehrende Slots für Bands und Ensembles', c: 'Ich vermiete Proberäume an Bands, meist abends.' }
+      ] },
+    { name: 'Sport & Wellness', q: 'Was genau?',
+      icon: I('<path d="M12 21C6.5 16.5 6.5 8 12 3c5.5 5 5.5 13.5 0 18z"/><path d="M12 8v13"/>'),
+      bullets: ['Kurse und Termine mit fixen Teilnehmerzahlen', 'Blöcke und Abos als Pakete verkaufen', 'Automatische Erinnerungen gegen No-Shows'],
+      subs: [
+        { n: 'Yoga- & Pilates-Studio', x: 'Wartelisten füllen frei werdende Plätze von selbst', c: 'Ich führe ein Yoga-Studio mit 15 Kursen pro Woche.' },
+        { n: 'Massage & Spa', x: 'Behandlung plus Umbauzeit automatisch eingeplant', c: 'Ich biete Massagen in meiner eigenen Praxis an.' },
+        { n: 'Fitness-Kurse', x: 'Dein Kursplan wird zur öffentlichen Buchungsseite', c: 'Ich gebe Fitness-Kurse in einem gemieteten Studio.' },
+        { n: 'Plätze & Courts', x: 'Mitglieder- und Gästepreise je Platz', c: 'Unser Verein vermietet vier Tennisplätze.' }
+      ] },
+    { name: 'Camps & Freizeit', q: 'Welches Angebot?',
+      icon: I('<path d="M12 4L2 20h20L12 4z"/><path d="M12 20v-5"/>'),
+      bullets: ['Anmeldung mit allen Infos: Alter, Allergien, Notfallkontakt', 'Anzahlung sichert Plätze verbindlich', 'Eltern-Infos gehen automatisch vor dem Start raus'],
+      subs: [
+        { n: 'Feriencamps', x: 'Wochen als Pakete, Geschwisterrabatt inklusive', c: 'Wir veranstalten Sommercamps für Kinder von 6 bis 12.' },
+        { n: 'Tagesausflüge', x: 'Fixe Termine mit Mindestteilnehmerzahl', c: 'Wir bieten geführte Tagesausflüge in den Bergen an.' },
+        { n: 'Kindergeburtstage', x: 'Zeitfenster mit Raum und Betreuung kombiniert', c: 'Bei uns kann man Kindergeburtstage feiern.' }
+      ] }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  let curBranche = null;
+
+  CFG.forEach((b, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'cfg-btn';
+    btn.innerHTML = b.icon + '<span>' + b.name + '</span>';
+    btn.addEventListener('click', () => selectBranche(i, btn));
+    $('cfgBranchen').appendChild(btn);
+  });
+
+  function selectBranche(i, btn) {
+    curBranche = CFG[i];
+    document.querySelectorAll('.cfg-btn').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    $('cfgQ').textContent = curBranche.q;
+    $('cfgSubs').innerHTML = '';
+    curBranche.subs.forEach(s => {
+      const sb = document.createElement('button');
+      sb.className = 'cfg-sub';
+      sb.textContent = s.n;
+      sb.addEventListener('click', () => selectSub(s, sb));
+      $('cfgSubs').appendChild(sb);
+    });
+    $('cfgFold3').classList.remove('open');
+    $('cfgFold2').classList.add('open');
+  }
+
+  function selectSub(s, sb) {
+    document.querySelectorAll('.cfg-sub').forEach(x => x.classList.remove('active'));
+    sb.classList.add('active');
+    $('cfgTitle').textContent = s.n;
+    const items = curBranche.bullets.concat([s.x]);
+    $('cfgCheck').innerHTML = items.map(t => '<li>' + CHECK_ICON + '<span>' + t + '</span></li>').join('');
+    $('cfgMsgUser').textContent = s.c;
+    $('cfgMsgUser').classList.remove('show');
+    $('cfgMsgAi').innerHTML = 'Alles klar! Dein Setup für <strong>' + s.n + '</strong> steht: Anzahlung und Erinnerungen sind aktiv, deine Buchungsseite ist vorbereitet.';
+    $('cfgMsgAi').classList.remove('show');
+    $('cfgFold3').classList.add('open');
+    document.querySelectorAll('#cfgCheck li').forEach((li, i) => setTimeout(() => li.classList.add('show'), 250 + i * 130));
+    setTimeout(() => $('cfgMsgUser').classList.add('show'), 400);
+    setTimeout(() => $('cfgMsgAi').classList.add('show'), 950);
+  }
 
   // Feature card glow follows cursor
   document.querySelectorAll('.feature').forEach(card => {
